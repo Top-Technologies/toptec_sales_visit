@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu under Sales Application -->
+    <menuitem id="menu_sales_visit_root"
+              name="Visit Management"
+              parent="sale.sale_menu_root"
+              sequence="15"/>
+
+    <!-- 1. My Visits -->
+    <menuitem id="menu_sales_visit_my"
+              name="My Visits"
+              parent="menu_sales_visit_root"
+              action="action_crm_visit_my"
+              sequence="10"/>
+
+    <!-- 2. Team Visits -->
+    <menuitem id="menu_sales_visit_team"
+              name="Team Visits"
+              parent="menu_sales_visit_root"
+              action="action_crm_visit_team"
+              sequence="20"/>
+
+    <!-- 3. All Visits (Managers) -->
+    <menuitem id="menu_sales_visit_all"
+              name="All Visits"
+              parent="menu_sales_visit_root"
+              action="action_crm_visit_all"
+              groups="toptec_sales_visit.group_visit_manager"
+              sequence="30"/>
+
+
+    <!-- 5. Reporting under Sales -> Reporting (Merged Visits & Sales Analysis) -->
+    <menuitem id="menu_sales_visit_report"
+              name="Visits Analysis"
+              parent="sale.menu_sale_report"
+              action="action_crm_visit_analysis"
+              sequence="20"/>
+
+    <!-- 6. Configuration under Sales -> Configuration -->
+    <menuitem id="menu_sales_visit_reasons"
+              name="Visit Reasons"
+              parent="sale.menu_sale_config"
+              action="action_crm_visit_reason"
+              groups="toptec_sales_visit.group_visit_admin"
+              sequence="45"/>
+</odoo>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- No-Sale Reasons -->
+        <record id="reason_no_budget" model="crm.visit.reason">
+            <field name="name">No budget</field>
+            <field name="category">no_sale</field>
+            <field name="requires_explanation">False</field>
+        </record>
+        <record id="reason_price_high" model="crm.visit.reason">
+            <field name="name">Price too high</field>
+            <field name="category">no_sale</field>
+            <field name="requires_explanation">False</field>
+        </record>
+        <record id="reason_competitor" model="crm.visit.reason">
+            <field name="name">Competitor offer</field>
+            <field name="category">no_sale</field>
+            <field name="requires_explanation">False</field>
+        </record>
+        <record id="reason_product_unavail" model="crm.visit.reason">
+            <field name="name">Product unavailable</field>
+            <field name="category">no_sale</field>
+            <field name="requires_explanation">False</field>
+        </record>
+        <record id="reason_not_interested" model="crm.visit.reason">
+            <field name="name">Customer not interested</field>
+            <field name="category">no_sale</field>
+            <field name="requires_explanation">False</field>
+        </record>
+        <record id="reason_decision_maker" model="crm.visit.reason">
+            <field name="name">Decision-maker unavailable</field>
+            <field name="category">no_sale</field>
+            <field name="requires_explanation">False</field>
+        </record>
+        <record id="reason_more_time" model="crm.visit.reason">
+            <field name="name">Needs more time</field>
+            <field name="category">no_sale</field>
+            <field name="requires_explanation">False</field>
+        </record>
+        <record id="reason_no_sale_other" model="crm.visit.reason">
+            <field name="name">Other</field>
+            <field name="category">no_sale</field>
+            <field name="requires_explanation">True</field>
+        </record>
+
+        <!-- Not-Visited Reasons -->
+        <record id="reason_cust_unavailable" model="crm.visit.reason">
+            <field name="name">Customer unavailable</field>
+            <field name="category">not_visited</field>
+            <field name="requires_explanation">False</field>
+        </record>
+        <record id="reason_cust_cancelled" model="crm.visit.reason">
+            <field name="name">Customer cancelled</field>
+            <field name="category">not_visited</field>
+            <field name="requires_explanation">False</field>
+        </record>
+        <record id="reason_transport_issue" model="crm.visit.reason">
+            <field name="name">Vehicle/transport issue</field>
+            <field name="category">not_visited</field>
+            <field name="requires_explanation">False</field>
+        </record>
+        <record id="reason_route_problem" model="crm.visit.reason">
+            <field name="name">Route or access problem</field>
+            <field name="category">not_visited</field>
+            <field name="requires_explanation">False</field>
+        </record>
+        <record id="reason_emergency" model="crm.visit.reason">
+            <field name="name">Emergency</field>
+            <field name="category">not_visited</field>
+            <field name="requires_explanation">False</field>
+        </record>
+        <record id="reason_not_visited_other" model="crm.visit.reason">
+            <field name="name">Other</field>
+            <field name="category">not_visited</field>
+            <field name="requires_explanation">True</field>
+        </record>
+    </data>
+</odoo>

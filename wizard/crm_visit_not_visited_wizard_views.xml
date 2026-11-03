@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_crm_visit_not_visited_wizard_form" model="ir.ui.view">
+        <field name="name">crm.visit.not.visited.wizard.form</field>
+        <field name="model">crm.visit.not.visited.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Mark as Not Visited">
+                <group>
+                    <field name="visit_id" invisible="1"/>
+                    <field name="not_visited_reason_id" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="not_visited_notes" placeholder="Reason explanation or feedback..."/>
+                </group>
+                <footer>
+                    <button name="action_confirm" string="Confirm Not Visited" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

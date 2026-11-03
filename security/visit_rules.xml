@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Multi-company Rules -->
+    <record id="crm_visit_company_rule" model="ir.rule">
+        <field name="name">CRM Visit Multi-Company</field>
+        <field name="model_id" ref="model_crm_visit"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- User / Salesperson Record Rule: Own & Team visits -->
+    <record id="crm_visit_user_rule" model="ir.rule">
+        <field name="name">Salesperson Own and Team Visits</field>
+        <field name="model_id" ref="model_crm_visit"/>
+        <field name="groups" eval="[(4, ref('group_visit_user'))]"/>
+        <field name="domain_force">[
+            '|', '|',
+            ('user_id', '=', user.id),
+            ('team_id.member_ids', 'in', [user.id]),
+            ('team_id.user_id', '=', user.id)
+        ]</field>
+    </record>
+
+    <!-- Manager Record Rule: All visits in company -->
+    <record id="crm_visit_manager_rule" model="ir.rule">
+        <field name="name">Manager All Company Visits</field>
+        <field name="model_id" ref="model_crm_visit"/>
+        <field name="groups" eval="[(4, ref('group_visit_manager'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+</odoo>

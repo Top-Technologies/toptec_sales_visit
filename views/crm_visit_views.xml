@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- List View -->
+    <record id="view_crm_visit_list" model="ir.ui.view">
+        <field name="name">crm.visit.list</field>
+        <field name="model">crm.visit</field>
+        <field name="arch" type="xml">
+            <list string="Customer Visits"
+                  decoration-muted="visit_status in ('cancelled', 'not_visited')"
+                  decoration-info="visit_status == 'planned'"
+                  decoration-success="visit_status == 'completed'">
+                <field name="name"/>
+                <field name="planned_date"/>
+                <field name="partner_id"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="team_id" optional="show"/>
+                <field name="visited_date" optional="show"/>
+                <field name="visit_status" widget="badge"
+                       decoration-info="visit_status == 'planned'"
+                       decoration-success="visit_status == 'completed'"
+                       decoration-danger="visit_status in ('cancelled', 'not_visited')"/>
+                <field name="sales_outcome" widget="badge"
+                       decoration-success="sales_outcome == 'sale'"
+                       decoration-danger="sales_outcome == 'no_sale'"
+                       decoration-muted="not sales_outcome"/>
+                <field name="total_sales_amount" sum="Total Revenue" optional="show"/>
+                <field name="cash_sale_count" optional="hide"/>
+                <field name="cash_sale_amount" sum="Total Cash (Birr)" optional="hide"/>
+                <field name="credit_sale_count" optional="show"/>
+                <field name="credit_sale_amount" sum="Total Credit (Birr)" optional="show"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_crm_visit_form" model="ir.ui.view">
+        <field name="name">crm.visit.form</field>
+        <field name="model">crm.visit</field>
+        <field name="arch" type="xml">
+            <form string="Customer Visit">
+                <header>
+                    <button name="action_plan" string="Set Planned" type="object"
+                            class="btn-secondary"
+                            invisible="visit_status not in ('draft', 'cancelled')"/>
+
+                    <button name="action_mark_visited" string="Visited" type="object"
+                            class="btn-primary"
+                            invisible="visit_status not in ('draft', 'planned')"/>
+
+                    <button name="action_create_quotation" string="Create Quotation" type="object"
+                            class="btn-success"
+                            invisible="sales_outcome != 'sale'"/>
+
+                    <button name="action_mark_not_visited" string="Mark Not Visited" type="object"
+                            class="btn-secondary"
+                            invisible="visit_status not in ('draft', 'planned')"/>
+
+                    <button name="action_cancel" string="Cancel" type="object"
+                            class="btn-secondary"
+                            invisible="visit_status in ('completed', 'cancelled')"/>
+
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object"
+                            class="btn-secondary"
+                            groups="toptec_sales_visit.group_visit_manager"
+                            invisible="visit_status == 'draft'"/>
+
+                    <field name="visit_status" widget="statusbar"
+                           statusbar_visible="draft,planned,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_quotations" type="object"
+                                class="oe_stat_button" icon="fa-dollar">
+                            <field name="sale_order_count" widget="statinfo" string="Quotations/Orders"/>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                        <h3><field name="partner_id" placeholder="Customer Name..."/></h3>
+                    </div>
+
+                    <group>
+                        <group string="Visit Details">
+                            <field name="user_id" widget="many2one_avatar_user"/>
+                            <field name="team_id"/>
+                            <field name="contact_id"/>
+                            <field name="visited_date"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Commercial Outcome">
+                            <field name="sales_outcome" widget="radio" options="{'horizontal': true}"/>
+                            <field name="no_sale_reason_id"
+                                   invisible="sales_outcome != 'no_sale'"
+                                   required="sales_outcome == 'no_sale'"/>
+                            <field name="no_sale_notes"
+                                   invisible="sales_outcome != 'no_sale'"
+                                   placeholder="Reason explanation and customer feedback..."/>
+                            <field name="sale_type" readonly="1"
+                                   invisible="sales_outcome != 'sale'"/>
+                            <field name="total_sales_amount" readonly="1"
+                                   invisible="sales_outcome != 'sale'"/>
+                            <field name="cash_sale_count" readonly="1"
+                                   invisible="sales_outcome != 'sale'"/>
+                            <field name="cash_sale_amount" readonly="1"
+                                   invisible="sales_outcome != 'sale'"/>
+                            <field name="credit_sale_count" readonly="1"
+                                   invisible="sales_outcome != 'sale'"/>
+                            <field name="credit_sale_amount" readonly="1"
+                                   invisible="sales_outcome != 'sale'"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Not-Visited Details" name="page_not_visited"
+                              invisible="visit_status != 'not_visited' and not not_visited_reason_id">
+                            <group>
+                                <field name="not_visited_reason_id"/>
+                                <field name="not_visited_notes"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_crm_visit_kanban" model="ir.ui.view">
+        <field name="name">crm.visit.kanban</field>
+        <field name="model">crm.visit</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="visit_status" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="visited_date"/>
+                <field name="visit_status"/>
+                <field name="sales_outcome"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_card">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <strong class="o_kanban_record_title"><field name="partner_id"/></strong>
+                                <span class="badge text-bg-light"><field name="name"/></span>
+                            </div>
+                            <div class="text-muted small mb-2" t-if="record.visited_date.raw_value">
+                                <i class="fa fa-calendar-check-o me-1" title="Visited Time"/> <field name="visited_date"/>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span t-if="record.sales_outcome.raw_value == 'sale'" class="badge text-bg-success">Sale Made</span>
+                                    <span t-elif="record.sales_outcome.raw_value == 'no_sale'" class="badge text-bg-danger">No Sale</span>
+                                    <span t-else="" class="badge text-bg-secondary">Not Set</span>
+                                </div>
+                                <field name="user_id" widget="many2one_avatar_user"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Calendar View -->
+    <record id="view_crm_visit_calendar" model="ir.ui.view">
+        <field name="name">crm.visit.calendar</field>
+        <field name="model">crm.visit</field>
+        <field name="arch" type="xml">
+            <calendar string="Visits Calendar"
+                      date_start="planned_date"
+                      color="user_id"
+                      mode="month">
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="visit_status"/>
+                <field name="sales_outcome"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_crm_visit_search" model="ir.ui.view">
+        <field name="name">crm.visit.search</field>
+        <field name="model">crm.visit</field>
+        <field name="arch" type="xml">
+            <search string="Search Visits">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="team_id"/>
+                <field name="no_sale_reason_id"/>
+
+                <filter string="My Visits" name="my_visits" domain="[('user_id', '=', uid)]"/>
+                <separator/>
+                <filter string="Today" name="today"
+                        domain="[('planned_date', '&gt;=', context_today().strftime('%Y-%m-%d 00:00:00')),
+                                 ('planned_date', '&lt;=', context_today().strftime('%Y-%m-%d 23:59:59'))]"/>
+                <filter string="Planned" name="planned" domain="[('visit_status', '=', 'planned')]"/>
+                <filter string="Completed" name="completed" domain="[('visit_status', '=', 'completed')]"/>
+                <filter string="Not Visited" name="not_visited" domain="[('visit_status', '=', 'not_visited')]"/>
+                <separator/>
+                <filter string="Sale Made" name="sale_made" domain="[('sales_outcome', '=', 'sale')]"/>
+                <filter string="No Sale" name="no_sale" domain="[('sales_outcome', '=', 'no_sale')]"/>
+                <separator/>
+                <filter string="With Cash Sales" name="with_cash_sales" domain="[('cash_sale_count', '>', 0)]"/>
+                <filter string="With Credit Sales" name="with_credit_sales" domain="[('credit_sale_count', '>', 0)]"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Salesperson" name="group_user" context="{'group_by': 'user_id'}"/>
+                    <filter string="Sales Team" name="group_team" context="{'group_by': 'team_id'}"/>
+                    <filter string="Customer" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'visit_status'}"/>
+                    <filter string="Outcome" name="group_outcome" context="{'group_by': 'sales_outcome'}"/>
+                    <filter string="Sale Type" name="group_sale_type" context="{'group_by': 'sale_type'}"/>
+                    <filter string="No-Sale Reason" name="group_no_sale_reason" context="{'group_by': 'no_sale_reason_id'}"/>
+                    <filter string="Planned Month" name="group_month" context="{'group_by': 'planned_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Window Actions -->
+    <!-- 1. My Visits -->
+    <record id="action_crm_visit_my" model="ir.actions.act_window">
+        <field name="name">My Visits</field>
+        <field name="res_model">crm.visit</field>
+        <field name="view_mode">list,kanban,calendar,form</field>
+        <field name="domain">[('user_id', '=', uid)]</field>
+        <field name="context">{'default_user_id': uid, 'search_default_today': 1}</field>
+        <field name="search_view_id" ref="view_crm_visit_search"/>
+    </record>
+
+    <!-- 2. Team Visits -->
+    <record id="action_crm_visit_team" model="ir.actions.act_window">
+        <field name="name">Team Visits</field>
+        <field name="res_model">crm.visit</field>
+        <field name="view_mode">list,kanban,calendar,form</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="view_crm_visit_search"/>
+    </record>
+
+    <!-- 3. All Visits (Managers) -->
+    <record id="action_crm_visit_all" model="ir.actions.act_window">
+        <field name="name">All Visits</field>
+        <field name="res_model">crm.visit</field>
+        <field name="view_mode">list,kanban,calendar,form,pivot,graph</field>
+        <field name="search_view_id" ref="view_crm_visit_search"/>
+    </record>
+
+</odoo>

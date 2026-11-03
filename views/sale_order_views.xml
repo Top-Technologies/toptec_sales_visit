@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sale Order Form View: Add Sale Type (Cash / Credit) & Visit Link -->
+    <record id="view_order_form_inherit_visit" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.visit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="sale_type" widget="radio" options="{'horizontal': true}"/>
+                <field name="visit_id" readonly="state != 'draft'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Quotation Tree View: Show Sale Type Badge -->
+    <record id="view_quotation_tree_inherit_visit" model="ir.ui.view">
+        <field name="name">sale.order.quotation.tree.inherit.visit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="before">
+                <field name="sale_type" widget="badge"
+                       decoration-info="sale_type == 'cash'"
+                       decoration-warning="sale_type == 'credit'"
+                       optional="show"/>
+                <field name="visit_id" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Sale Order Tree View: Show Sale Type Badge -->
+    <record id="view_order_tree_inherit_visit" model="ir.ui.view">
+        <field name="name">sale.order.tree.inherit.visit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="before">
+                <field name="sale_type" widget="badge"
+                       decoration-info="sale_type == 'cash'"
+                       decoration-warning="sale_type == 'credit'"
+                       optional="show"/>
+                <field name="visit_id" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Sale Order Search View: Add Cash/Credit Filters and Group By -->
+    <record id="view_sales_order_filter_inherit_visit" model="ir.ui.view">
+        <field name="name">sale.order.filter.inherit.visit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='my_sale_orders_filter']" position="after">
+                <separator/>
+                <filter string="Cash Sales" name="filter_sale_cash" domain="[('sale_type', '=', 'cash')]"/>
+                <filter string="Credit Sales" name="filter_sale_credit" domain="[('sale_type', '=', 'credit')]"/>
+                <filter string="From Field Visits" name="filter_from_visit" domain="[('visit_id', '!=', False)]"/>
+            </xpath>
+            <xpath expr="//group" position="inside">
+                <filter string="Sale Type (Cash/Credit)" name="group_sale_type" context="{'group_by': 'sale_type'}"/>
+                <filter string="Originating Visit" name="group_visit" context="{'group_by': 'visit_id'}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

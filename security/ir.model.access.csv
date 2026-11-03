@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_crm_visit_user,crm.visit.user,model_crm_visit,toptec_sales_visit.group_visit_user,1,1,1,0
+access_crm_visit_manager,crm.visit.manager,model_crm_visit,toptec_sales_visit.group_visit_manager,1,1,1,1
+access_crm_visit_admin,crm.visit.admin,model_crm_visit,toptec_sales_visit.group_visit_admin,1,1,1,1
+access_crm_visit_reason_user,crm.visit.reason.user,model_crm_visit_reason,toptec_sales_visit.group_visit_user,1,0,0,0
+access_crm_visit_reason_manager,crm.visit.reason.manager,model_crm_visit_reason,toptec_sales_visit.group_visit_manager,1,1,1,0
+access_crm_visit_reason_admin,crm.visit.reason.admin,model_crm_visit_reason,toptec_sales_visit.group_visit_admin,1,1,1,1
+access_crm_visit_not_visited_wizard_user,crm.visit.not.visited.wizard.user,model_crm_visit_not_visited_wizard,toptec_sales_visit.group_visit_user,1,1,1,1
+access_crm_visit_not_visited_wizard_manager,crm.visit.not.visited.wizard.manager,model_crm_visit_not_visited_wizard,toptec_sales_visit.group_visit_manager,1,1,1,1
+access_crm_visit_not_visited_wizard_admin,crm.visit.not.visited.wizard.admin,model_crm_visit_not_visited_wizard,toptec_sales_visit.group_visit_admin,1,1,1,1
+

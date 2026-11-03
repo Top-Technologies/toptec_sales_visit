@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_sales_visit" model="ir.module.category">
+        <field name="name">Sales Visit Management</field>
+        <field name="description">Field sales customer visits and management</field>
+        <field name="sequence">25</field>
+        <field name="parent_id" ref="base.module_category_sales_sales"/>
+    </record>
+
+    <!-- Salesperson / Field User -->
+    <record id="group_visit_user" model="res.groups">
+        <field name="name">Salesperson (Field Visits)</field>
+        <field name="category_id" ref="module_category_sales_visit"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Visit Manager -->
+    <record id="group_visit_manager" model="res.groups">
+        <field name="name">Sales Visit Manager</field>
+        <field name="category_id" ref="module_category_sales_visit"/>
+        <field name="implied_ids" eval="[(4, ref('group_visit_user'))]"/>
+    </record>
+
+    <!-- Visit Administrator -->
+    <record id="group_visit_admin" model="res.groups">
+        <field name="name">Sales Visit Administrator</field>
+        <field name="category_id" ref="module_category_sales_visit"/>
+        <field name="implied_ids" eval="[(4, ref('group_visit_manager'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+</odoo>
