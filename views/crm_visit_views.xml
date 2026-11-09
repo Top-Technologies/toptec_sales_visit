@@ -43,11 +43,11 @@
                 <header>
                     <button name="action_plan" string="Set Planned" type="object"
                             class="btn-secondary"
-                            invisible="visit_status not in ('draft', 'cancelled')"/>
+                            invisible="visit_status not in ('draft', 'cancelled') or sale_order_count &gt; 0 or sales_outcome"/>
 
                     <button name="action_mark_visited" string="Visited" type="object"
                             class="btn-primary"
-                            invisible="visit_status not in ('draft', 'planned')"/>
+                            invisible="visit_status not in ('draft', 'planned') or sale_order_count &gt; 0 or sales_outcome == 'sale'"/>
 
                     <button name="action_create_quotation" string="Create Quotation" type="object"
                             class="btn-success"
@@ -55,11 +55,11 @@
 
                     <button name="action_mark_not_visited" string="Mark Not Visited" type="object"
                             class="btn-secondary"
-                            invisible="visit_status not in ('draft', 'planned')"/>
+                            invisible="visit_status not in ('draft', 'planned') or sale_order_count &gt; 0 or sales_outcome"/>
 
                     <button name="action_cancel" string="Cancel" type="object"
                             class="btn-secondary"
-                            invisible="visit_status in ('completed', 'cancelled')"/>
+                            invisible="visit_status in ('completed', 'cancelled') or sale_order_count &gt; 0"/>
 
                     <button name="action_reset_to_draft" string="Reset to Draft" type="object"
                             class="btn-secondary"

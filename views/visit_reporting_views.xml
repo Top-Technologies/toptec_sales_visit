@@ -16,6 +16,7 @@
                 <field name="credit_sale_count" type="measure"/>
                 <field name="total_sales_count" type="measure"/>
                 <field name="no_sale_count" type="measure"/>
+                <field name="total_visit_count" type="measure"/>
                 <field name="cash_sale_amount" type="measure"/>
                 <field name="credit_sale_amount" type="measure"/>
                 <field name="total_sales_amount" type="measure"/>

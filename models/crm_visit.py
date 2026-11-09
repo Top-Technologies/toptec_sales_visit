@@ -155,6 +155,11 @@ class CrmVisit(models.Model):
         compute="_compute_sales_breakdown",
         store=True,
     )
+    total_visit_count = fields.Integer(
+        string="Total Visits (Cash + Credit + No Sales)",
+        compute="_compute_sales_breakdown",
+        store=True,
+    )
 
     # No Sale / Not Visited reasons
     no_sale_reason_id = fields.Many2one(
@@ -185,6 +190,7 @@ class CrmVisit(models.Model):
     def _compute_sales_breakdown(self):
         for visit in self:
             visit.no_sale_count = 1 if visit.sales_outcome == "no_sale" else 0
+            visit.total_visit_count = visit.cash_sale_count + visit.credit_sale_count + visit.no_sale_count
             valid_orders = visit.sale_order_ids.filtered(lambda o: o.state != "cancel")
             cash_orders = valid_orders.filtered(lambda o: o.sale_type == "cash")
             credit_orders = valid_orders.filtered(lambda o: o.sale_type == "credit")
@@ -307,7 +313,16 @@ class CrmVisit(models.Model):
             "origin": self.name,
         }
         order = self.env["sale.order"].create(order_vals)
-        self.write({"sales_outcome": "sale"})
+        now = fields.Datetime.now()
+        self.write({
+            "sales_outcome": "sale",
+            "visit_status": "completed",
+            "visited_date": self.visited_date or now,
+        })
+        self.message_post(
+            body=_("Quotation %(order)s created from this visit. Visit marked as Visited at %(time)s.",
+                   order=order.name, time=fields.Datetime.to_string(now))
+        )
 
         return {
             "name": _("Quotation"),
